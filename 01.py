@@ -1,0 +1,23 @@
+def division(dividend, divider):
+    digits = [int(digit) for digit in str(dividend)]
+    
+    result = []
+    ost = 0
+    for i in digits:
+        i += ost * 10 # учитываем остаток от предыдущего разряда
+        whole = i // divider
+        if whole != 0: # т.е удалось поделить
+            ost = i % divider
+            result.append(whole)
+        else:
+            ost = i
+    
+    return result, ost
+
+# Пример использования
+dividend = 43916
+divider = 78
+
+result, remainder = division(dividend, divider)
+print("Результат:", result)
+print("Остаток:", remainder)
