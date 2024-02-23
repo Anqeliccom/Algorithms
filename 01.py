@@ -12,7 +12,11 @@ def division(dividend, divider):
         else:
             ost = i
     
-    return result, ost
+    result_str = [str(digit) for digit in result]
+    result_string = ''.join(result_str)
+    result_number = int(result_string)
+    
+    return result_number, ost
 
 # Пример использования
 dividend = 43916
