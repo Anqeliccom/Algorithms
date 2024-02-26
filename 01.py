@@ -3,15 +3,22 @@ def division(dividend, divider):
     
     result = []
     ost = 0
-    for i in digits:
-        i += ost * 10 # учитываем остаток от предыдущего разряда
-        whole = i // divider
-        if whole != 0: # т.е удалось поделить
-            ost = i % divider
-            result.append(whole)
-        else:
-            ost = i
     
+    for i in digits:
+        i += ost * 10  # учитываем остаток от предыдущего разряда
+        c = 0
+        whole = 0
+        
+        # своё деление
+        for j in range(9, -1, -1):
+            c = divider * j
+            if c <= i:
+                whole = j
+                break
+
+        ost = i - whole * divider # свой остаток
+        result.append(whole)
+
     result_str = [str(digit) for digit in result]
     result_string = ''.join(result_str)
     result_number = int(result_string)
