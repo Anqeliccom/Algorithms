@@ -7,12 +7,10 @@ typedef struct {
     size_t len;
 } DynamicArr;
 
-DynamicArr* create_dynamic_arr() {
-    DynamicArr* arr = (DynamicArr*)malloc(sizeof(DynamicArr));
+void create_dynamic_arr(DynamicArr* arr) {
     (*arr).capacity = 1;
     (*arr).data = (int*)malloc(sizeof(int) * (*arr).capacity);
     (*arr).len = 0;
-    return arr;
 }
 
 void add_to_end(DynamicArr* arr, int elem) {
@@ -38,11 +36,12 @@ void delete_last(DynamicArr* arr) {
 
 void free_dynamic_arr(DynamicArr* arr) {
     free((*arr).data);
-    free(arr);
 }
 
 int main() {
-    DynamicArr* arr = create_dynamic_arr();
+    DynamicArr arr;
+    create_dynamic_arr(&arr);
+
     int request;
 
     while (1) {
@@ -59,28 +58,29 @@ int main() {
                 int elem;
                 printf("Введите значение: ");
                 scanf("%d", &elem);
-                add_to_end(arr, elem);
+                add_to_end(&arr, elem);
                 break;
             }
             case 2: {
                 size_t index;
                 printf("Введите индекс элемента: ");
                 scanf("%lu", &index);
-                if (index >= 0 && index < (*arr).len) {
-                    printf("Элемент с индексом %lu: %d\n", index, get_by_index(arr, index));
+                if (index >= 0 && index < arr.len) {
+                    printf("Элемент с индексом %lu: %d\n", index, get_by_index(&arr, index));
                 } else {
                     printf("Индекс находится за пределами массива\n");
                 }
                 break;
             }
             case 3:
-                if ((*arr).len == 0) {
+                if (arr.len == 0) {
                     printf("Массив пуст\n");
+                } else {
+                    delete_last(&arr);
                 }
-                delete_last(arr);
                 break;
             case 4:
-                free_dynamic_arr(arr);
+                free_dynamic_arr(&arr);
                 return 0;
             default:
                 printf("Некорректный номер запроса\n");
@@ -88,8 +88,8 @@ int main() {
         }
 
         printf("Текущий массив: ");
-        for (size_t i = 0; i < (*arr).len; i++) {
-            printf("%d ", (*arr).data[i]);
+        for (size_t i = 0; i < arr.len; i++) {
+            printf("%d ", arr.data[i]);
         }
         printf("\n");
     }
