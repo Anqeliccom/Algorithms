@@ -1,19 +1,31 @@
-class Solution:
-    def isBipartite(self, graph):
-        colors = {}
-        
-        def dfs(node, color):
-            if node in colors:
-                return colors[node] == color
-            colors[node] = color
-            next_color = not color
-            return all(dfs(neighbour, next_color) for neighbour in graph[node])
+def is_bipartite(graph):
+    n = len(graph)
+    colors = [-1] * n
 
-        return all(dfs(node, 1) for node in range(len(graph)) if node not in colors)
+    def dfs(node, color):
+        stack = [(node, color)]
+
+        while stack:
+            node, color = stack.pop()
+
+            if colors[node] == -1:
+                colors[node] = color
+                for neighbor in graph[node]:
+                    stack.append((neighbor, 1 - color))
+            else:
+                if colors[node] != color:
+                    return False
+
+        return True
+
+    for start in range(n):
+        if colors[start] == -1:
+            if not dfs(start, 0):
+                return False
+
+    return True
 
 graph1 = [[1,2,3],[0,2],[0,1,3],[0,2]]
-graph2 = [[1,3],[0,2],[1,3],[0,2]]
-
-solution = Solution()
-print(solution.isBipartite(graph1)) # False
-print(solution.isBipartite(graph2)) # True
+graph2 = [[1, 3], [0, 2], [1, 3], [0, 2]]
+print(is_bipartite(graph1)) # False
+print(is_bipartite(graph2)) # True
