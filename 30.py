@@ -1,4 +1,4 @@
-from collections import defaultdict, deque
+from collections import defaultdict
 
 class Solution:
     def sortItems(self, n, m, group, before_items):
@@ -16,10 +16,7 @@ class Solution:
                 item_dep[previous].append(i)
                 if group[previous] != group[i]: # если элементы принадлежат разным группам 
                     group_dep[group[previous]].append(group[i])
-        
-        print(item_dep)
-        print(group_dep)
-        
+
         def dfs(graph, node, visited, result, counter):
             visited[node] = True
             for neighbor in graph[node]:
@@ -29,13 +26,13 @@ class Solution:
                 elif neighbor not in result:
                     return False  # вершина была посещена, но не добавлена в результат - обнаружен цикл
             result.append(node)
-            counter[0] -= 1
+            counter -= 1
             return True
         
         # топологическая сортировка для групп
         group_visited = [False] * new_group_id
         group_res = []
-        group_counter = [new_group_id]
+        group_counter = new_group_id
         for i in range(new_group_id):
             if not group_visited[i]:
                 if not dfs(group_dep, i, group_visited, group_res, group_counter):
@@ -45,7 +42,7 @@ class Solution:
         # топологическая сортировка для элементов
         item_visited = [False] * n
         item_res = []
-        item_counter = [n]
+        item_counter = n
         for i in range(n):
             if not item_visited[i]:
                 if not dfs(item_dep, i, item_visited, item_res, item_counter):
@@ -65,7 +62,6 @@ class Solution:
             result.extend(items)
         
         return result
-
 
 # тесты
 solution = Solution()
